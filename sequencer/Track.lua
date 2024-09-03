@@ -1,15 +1,16 @@
 local checks <const> = require('checks')
 local Protocol <const> = require('utilities/Protocol')
-local Track <const> = {}
+local Track <const> = {
+    __type = 'Track'
+}
 Track.__index = Track
 
-function Track.new(Sequence)
+function Track.new()
     checks('Sequence')
     --[[
         Create a new instance of Track.
     ]]
-    local self = setmetatable({}, Track)
-    self.Sequence = Sequence
+    local self <const> = setmetatable({}, Track)
     return self
 end
 

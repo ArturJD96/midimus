@@ -9,8 +9,9 @@ Sequence.__index = Sequence
 
 function Sequence.new(id)
     checks('?string')
-    local self = setmetatable({}, Sequence)
-    self.id = id
+    local self <const> = setmetatable({}, Sequence)
+    self.id = id           -- internal
+    self.name = 'sequence' -- for user manipulation.
     self.duration = nil
     self.events = {}
     return self

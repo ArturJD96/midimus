@@ -8,7 +8,7 @@ Protocol.__index = Protocol
 
 function Protocol.new(id, property_creators)
     checks('string', 'table')
-    local self = setmetatable({}, Protocol)
+    local self <const> = setmetatable({}, Protocol)
     self.id = id
     self.property_creators = property_creators
     self.constructor_name = Protocol._default_constructor_name
@@ -72,7 +72,7 @@ local registrable = Protocol.new('registrable',
         new = function(class, constructor)
             checks('table', 'function')
             return function(...)
-                local obj = constructor(...)
+                local obj <const> = constructor(...)
                 if not obj['id'] then
                     obj.id = class._get_default_id()
                 end
@@ -136,9 +136,9 @@ local registrable = Protocol.new('registrable',
                     1) Sequence_1, Sequence_2, Sequence_3 -> Sequence_4
                     2) Sequence_1, Sequence_3, Sequence_5 -> Sequence_2 (between 1 and 3)
                 ]]
-                local ids, id_num = {}, nil
-                local separator = '_'
-                local _join = function(id, sep, num)
+                local ids <const>, id_num = {}, nil
+                local separator <const> = '_'
+                local _join <const> = function(id, sep, num)
                     checks('string', 'string', 'string')
                     return id .. sep .. num
                 end
@@ -154,7 +154,7 @@ local registrable = Protocol.new('registrable',
                 for _, n in ipairs(ids) do
                     if n - id == 1 then id = n else break end
                 end
-                local default_id = _join(class._default_id, separator, tostring(id + 1))
+                local default_id <const> = _join(class._default_id, separator, tostring(id + 1))
                 return default_id
             end
         end
