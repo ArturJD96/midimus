@@ -1,8 +1,9 @@
 local lu <const> = require 'luaunit'
 local Sequence <const> = require 'Sequence'
-local Track <const> = require 'Track'
 
 TestSequence = {}
-function TestTrack:setup()
-    -- Sequence.reset()
+function TestSequence:setup()
+    Sequence.reset_register()
 end
+
+os.exit(lu.LuaUnit.run())
