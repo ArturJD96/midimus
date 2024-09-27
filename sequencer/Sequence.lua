@@ -17,6 +17,16 @@ function Sequence.new(id)
     return self
 end
 
+function Sequence:record(event, time)
+    checks('table', 'table', 'number') -- why not 'Sequence', 'Event' instead of 'table'?
+    if self.events[time] then
+        table.insert(self.events[time], event)
+    else
+        self.events[time] = { event }
+    end
+    return self
+end
+
 Protocol.apply(Sequence, { 'registrable' })
 
 return Sequence

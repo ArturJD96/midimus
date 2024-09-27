@@ -6,3 +6,5 @@ TestSequence = {}
 function TestTrack:setup()
     -- Sequence.reset()
 end
+
+os.exit(lu.LuaUnit.run())

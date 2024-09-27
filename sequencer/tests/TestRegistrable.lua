@@ -30,7 +30,7 @@ function TestRegistrable:test_type_not_present()
     Test.new = function(self)
         return setmetatable({}, Test)
     end
-    lu.assertErrorMsgContains('', Protocol.apply, Test, { 'registrable' })
+    lu.assertErrorMsgContains('', Protocol.apply, Test, { 'registrable' }) -- ???
 end
 
 function TestRegistrable:test_register_count()
