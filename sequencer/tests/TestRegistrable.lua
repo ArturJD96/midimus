@@ -37,8 +37,8 @@ function TestRegistrable:test_register_count()
     lu.assertEquals(self.Class.register_count(), self.objects_count)
 end
 
-function TestRegistrable:test_remove()
-    self.Class.remove('obj_1')
+function TestRegistrable:test_delete()
+    self.Class.delete('obj_1')
     lu.assertEquals(self.Class.register_count(), self.objects_count - 1)
     lu.assertNil(self.Class._register['obj_1'])
 end
@@ -66,18 +66,16 @@ function TestRegistrable:test_new()
     lu.assertNotNil(self.Class._register['Class_5'])
 end
 
-function TestRegistrable:test_remove_and_add_new()
+function TestRegistrable:test_delete_and_add_new()
     self.Class.new() -- replace 'register' with native 'new' constructor.
     self.Class.new()
     self.Class.new()
     local expected_name = self.Class._default_id .. '_2'
     lu.assertNotNil(self.Class._register[expected_name])
-    self.Class.remove(expected_name)
+    self.Class.delete(expected_name)
     lu.assertNil(self.Class._register[expected_name])
     self.Class.new('Testtt') --should not affect numeration.
     lu.assertNil(self.Class._register[expected_name])
     self.Class.new()
     lu.assertNotNil(self.Class._register[expected_name])
 end
-
-os.exit(lu.LuaUnit.run())

@@ -10,6 +10,7 @@ Sequence.__index = Sequence
 function Sequence.new(id)
     checks('?string')
     local self <const> = setmetatable({}, Sequence)
+    self.__type = 'Sequence'
     self.id = id           -- internal
     self.name = 'sequence' -- for user manipulation.
     self.duration = nil
@@ -17,14 +18,33 @@ function Sequence.new(id)
     return self
 end
 
-function Sequence:record(event, time)
-    checks('table', 'table', 'number') -- why not 'Sequence', 'Event' instead of 'table'?
-    if self.events[time] then
-        table.insert(self.events[time], event)
-    else
-        self.events[time] = { event }
+function Sequence:record(event)
+    checks('Sequence', 'Event')
+    local time
+    for i = #self.events, 0, -1 do
+        time = i > 0 and self.events[i].time or 0
+        if event.time >= time then
+            table.insert(self.events, i + 1, event)
+            break
+        end
     end
     return self
+end
+
+function Sequence:remove(event_id)
+    checks('Sequence', 'string')
+    for i, e in ipairs(self.events) do
+        if e.id == event_id then
+            table.remove(self.events, i)
+            break
+        end
+    end
+    return self
+end
+
+function Sequence:is_empty()
+    checks('Sequence')
+    return #self.events == 0
 end
 
 Protocol.apply(Sequence, { 'registrable' })

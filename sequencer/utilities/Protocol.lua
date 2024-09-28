@@ -91,10 +91,10 @@ local registrable = Protocol.new('registrable',
             end
         end,
 
-        remove = function(class)
+        delete = function(class)
             return function(id)
                 checks('string')
-                assert(class._register[id], 'Cannot remove' .. id .. '. Object not present in register.')
+                assert(class._register[id], 'Cannot delete ' .. id .. '. Object not present in register.')
                 class._register[id] = nil
             end
         end,

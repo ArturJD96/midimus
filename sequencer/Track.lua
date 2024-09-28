@@ -6,11 +6,11 @@ local Track <const> = {
 Track.__index = Track
 
 function Track.new()
-    checks('Sequence')
     --[[
         Create a new instance of Track.
     ]]
     local self <const> = setmetatable({}, Track)
+    self.__type = 'Track'
     return self
 end
 
