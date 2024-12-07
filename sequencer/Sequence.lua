@@ -2,6 +2,18 @@ local checks <const> = require 'checks'
 local Protocol <const> = require 'utilities/Protocol'
 local Track <const> = require 'Track'
 
+--[[
+
+    Class: S E Q U E N C E
+
+    A sequence of events.
+
+    This object represents a 'musical' part
+    of the composition. It contains the music
+    represented as a named sequence of events.
+
+]]
+
 local Sequence <const> = {
     __type = 'Sequence'
 }
