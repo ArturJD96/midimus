@@ -5,7 +5,7 @@ local Protocol <const> = require('utilities/Protocol')
 
     Class: T R A C K
 
-    A track loading & performing a loaded sequence.
+    A performer able to play out sequence.
 
     This object is responsible for correctly performing
     a sequence by progressing it's events through time
@@ -14,20 +14,20 @@ local Protocol <const> = require('utilities/Protocol')
 
 ]]
 
-local Track <const> = {
+local Performer <const> = {
     __type = 'Track'
 }
-Track.__index = Track
+Performer.__index = Performer
 
-function Track.new()
+function Performer.new()
     --[[
         Create a new instance of Track.
     ]]
-    local self <const> = setmetatable({}, Track)
-    self.__type = 'Track'
+    local self <const> = setmetatable({}, Performer)
+    self.__type = 'Performer'
     return self
 end
 
-Protocol.apply(Track, { 'registrable' })
+Protocol.apply(Performer, { 'registrable' })
 
-return Track
+return Performer
