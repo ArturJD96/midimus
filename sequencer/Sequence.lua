@@ -25,9 +25,17 @@ function Sequence.new(id)
     self.__type = 'Sequence'
     self.id = id           -- internal
     self.name = 'sequence' -- for user manipulation.
-    self.duration = nil
     self.events = {}
     return self
+end
+
+function Sequence:_calc_duration()
+    checks('Sequence')
+    local duration = 0
+    for _, event in ipairs(self.events) do
+        duration = duration + event.time
+    end
+    return duration
 end
 
 function Sequence:record(event)
@@ -57,6 +65,13 @@ end
 function Sequence:is_empty()
     checks('Sequence')
     return #self.events == 0
+end
+
+function Sequence:perform()
+    checks('Sequence')
+    local performer = Performer.new()
+    performer:set_sequence(self)
+    return performer
 end
 
 Protocol.apply(Sequence, { 'registrable' })

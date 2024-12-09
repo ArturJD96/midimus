@@ -6,11 +6,12 @@ local Event <const> = {
 }
 Event.__index = Event
 
-function Event.new(time)
-    checks('?number')
+function Event.new(time, duration)
+    checks('?number', '?number')
     local self <const> = setmetatable({}, Event)
     self.__type = 'Event'
-    self.time = time or 0 -- ms
+    self.time = time or 0         -- ms
+    self.duration = duration or 0 -- ms
     return self
 end
 
