@@ -1,4 +1,5 @@
 local checks <const> = require('checks')
+local luaproc <const> = require('luaproc')
 local Protocol <const> = require('utilities/Protocol')
 
 --[[
@@ -66,6 +67,12 @@ function Performer:set_time(time)
             self._next_event = event
             break
         end
+    end
+end
+
+function Performer:play()
+    for i, event in ipairs(self.sequence.events) do
+        event:callback()
     end
 end
 
