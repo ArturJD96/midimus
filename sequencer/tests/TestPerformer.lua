@@ -1,5 +1,4 @@
 local lu <const> = require 'luaunit'
--- local lp = require 'luaproc' -- multithreading
 local Event <const> = require 'Event'
 local Sequence <const> = require 'Sequence'
 local Performer <const> = require 'Performer'
@@ -53,17 +52,18 @@ function TestPerformer:test_set_time()
     lu.assertNil(performer._next_event)
 end
 
-function TestPerformer:test_play()
+function TestPerformer:test_pd_clock_registration()
     local performer = self.sequence:perform()
-    --[ Those two processes should run concurrently. ]
-    performer:play() -- sets the self.last_event
-    for i = 1, #self.times, 1 do
-        local time_prev = self.times[i] or 0
-        local time_curr = self.times[i]
-        local ms = time_curr - time_prev
-        os.execute('sleep ' .. tonumber(ms / 1000))
-        lu.assertEquals(self.last_event, self.events[i].id)
-    end
+    local pdlua_obj = performer.pdlua_obj -- achieve using new protocol.
+    local callback_name = 'callback_' .. performer.id
+    lu.assertNotNil(pdlua_obj[callback_name])
+    performer:free() -- deregister clock and remove callback.
+    lu.assertNil(pdlua_obj[callback_name])
+    --[[
+    Based on legacy Seq (=self):
+        self.clock = self.pd.Clock:new():register(self.pdlua_obj, self.clock_callback_id)
+        self.pdlua_obj[self.clock_callback_id] = function() seq_self:play_event_callback() end
+    ]]
 end
 
 -- function TestTrack:test_

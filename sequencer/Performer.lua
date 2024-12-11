@@ -1,5 +1,4 @@
 local checks <const> = require('checks')
-local luaproc <const> = require('luaproc')
 local Protocol <const> = require('utilities/Protocol')
 
 --[[
