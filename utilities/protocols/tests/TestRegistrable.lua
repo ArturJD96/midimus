@@ -1,5 +1,7 @@
 local lu <const> = require 'luaunit'
-local Protocol <const> = require 'utilities/Protocol'
+local lfs <const> = require "lfs"
+local Protocol <const> = require 'Protocol'
+local Registrable <const> = require 'Registrable'
 
 TestRegistrable = {}
 function TestRegistrable:setup()
@@ -67,7 +69,7 @@ function TestRegistrable:test_new()
 end
 
 function TestRegistrable:test_delete_and_add_new()
-    self.Class.new() -- replace 'register' with native 'new' constructor.
+    self.Class.new()
     self.Class.new()
     self.Class.new()
     local expected_name = self.Class._default_id .. '_2'
@@ -78,4 +80,24 @@ function TestRegistrable:test_delete_and_add_new()
     lu.assertNil(self.Class._register[expected_name])
     self.Class.new()
     lu.assertNotNil(self.Class._register[expected_name])
+end
+
+function TestRegistrable:test_in_protocols_property()
+    lu.assertEquals(#self.Class.__protocols, 1)
+    lu.assertEquals(self.Class.__protocols, { 'registrable' })
+end
+
+function TestRegistrable:test_unique()
+    local expected_param = 'param'
+    local class = { __type = 'class' }
+    class.__index = self.Class
+    class.new = function(id)
+        self = { param = expected_param }
+        setmetatable(self, class)
+        return self
+    end
+    Protocol.apply(class, { "registrable" }, { singleton = true })
+    local c1 = self.Class.new()
+    local c2 = self.Class.new() -- should return reference to c1
+    lu.assertEquals(c1, c2)
 end
