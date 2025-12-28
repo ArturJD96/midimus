@@ -1,5 +1,8 @@
+package.path = package.path .. ';./../utilities/protocols/?.lua'
+
 local checks <const> = require 'checks'
-local Protocol <const> = require 'utilities/Protocol'
+local Registrable <const> = require 'Registrable'
+
 local Performer <const> = require 'Performer'
 
 --[[
@@ -74,6 +77,6 @@ function Sequence:perform()
     return performer
 end
 
-Protocol.apply(Sequence, { 'registrable' })
+Registrable:conform(Sequence)
 
 return Sequence

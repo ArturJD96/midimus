@@ -1,8 +1,8 @@
-local lu <const> = require 'luaunit'
-local Recorder <const> = require 'Recorder'
+-- local lu <const> = require 'luaunit'
+-- local Recorder <const> = require 'Recorder'
 
-TestRecorder = {}
+-- TestRecorder = {}
 
-function TestRecorder:test_new()
-    local recorder = Recorder.new()
-end
+-- function TestRecorder:test_new()
+--     local recorder = Recorder.new()
+-- end

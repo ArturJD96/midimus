@@ -1,5 +1,7 @@
+package.path = package.path .. ';./../utilities/protocols/?.lua'
+
 local checks <const> = require 'checks'
-local Protocol <const> = require 'utilities/Protocol'
+local Registrable <const> = require 'Registrable'
 
 local Event <const> = {
     __type = 'Event'
@@ -16,6 +18,6 @@ function Event.new(time, duration, callback)
     return self
 end
 
-Protocol.apply(Event, { 'registrable' })
+Registrable:conform(Event)
 
 return Event

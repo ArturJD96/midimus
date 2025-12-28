@@ -1,5 +1,7 @@
-local checks <const> = require('checks')
-local Protocol <const> = require('utilities/Protocol')
+package.path = package.path .. ';./../utilities/protocols/?.lua'
+
+local checks <const> = require 'checks'
+local Registrable <const> = require 'Registrable'
 
 --[[
 
@@ -75,6 +77,6 @@ function Performer:play()
     end
 end
 
-Protocol.apply(Performer, { 'registrable' })
+Registrable:conform(Performer)
 
 return Performer

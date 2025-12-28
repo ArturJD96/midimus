@@ -56,7 +56,7 @@ function TestPerformer:test_pd_clock_registration()
     local performer = self.sequence:perform()
     local pdlua_obj = performer.pdlua_obj -- achieve using new protocol.
     local callback_name = 'callback_' .. performer.id
-    lu.assertNotNil(pdlua_obj[callback_name])
+    lu.assertEquals(pdlua_obj[callback_name], 'function')
     performer:free() -- deregister clock and remove callback.
     lu.assertNil(pdlua_obj[callback_name])
     --[[
