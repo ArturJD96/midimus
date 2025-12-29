@@ -1,17 +1,8 @@
 local pd <const> = pd or require('./utilities/pd_stub')
 local o <const>  = pd.Class:new():register("score") ---@type Score
 
----Return current time.
----@return Time
-local function time()
-    return os.clock()
-end
-
----Calc (absolute) time from the given stamp.
----@param start Time
----@return Time
-local function timedelta(start)
-    return math.abs(time() - start)
+local function systime2sec(systime)
+    return systime / pd.TIMEUNITPERMSEC * 10
 end
 
 ---Prepare a metatable to be implemented as a "class."
@@ -33,7 +24,7 @@ end
 local Event <const> = class("Event", {})
 function Event.new(name)
     local self <const> = setmetatable({}, Event)
-    self.id = os.time()
+    self.id = pd.systime()
     self.name = name
     self.duration = nil
     self.props = {}
@@ -45,14 +36,15 @@ function Event:tostring()
     local cls = getmetatable(self).__type
     local brk = '\n        '
     local id <const> = '(' .. self.id .. ')'
+    local time = systime2sec(self.duration)
     local players_brk = ''
     for i, p in ipairs(self.players) do
-        local line = '  - at ' .. tostring(p.offset) .. ': ' .. tostring(p) .. brk
+        local line = '  - at ' .. tostring(systime2sec(p.offset)) .. ': ' .. tostring(p) .. brk
         players_brk = players_brk .. line
     end
     local s = cls .. ' '
         .. (self.name or '') .. ' ' .. id .. ' [' .. tostring(self) .. ']:' .. brk
-        .. "* duration: " .. tostring(self.duration) .. brk
+        .. "* duration: " .. tostring(time) .. 's' .. brk
         .. "* players:" .. brk
         .. players_brk
     return s
@@ -73,19 +65,19 @@ end
 local Recorder <const> = class("Recorder", {})
 function Recorder.new(track, speed)
     local self = setmetatable({}, Recorder) ---@type Recorder
-    self.start = time()
+    self.start = pd.systime()
     self.speed = speed
     self.target = track
     return self
 end
 
 function Recorder:record(event)
-    local dt = timedelta(self.start)
+    local dt = pd.timesince(self.start)
     table.insert(self.target.players, Player.new(dt, { event }, self.speed))
 end
 
 function Recorder:finish()
-    self.target.duration = timedelta(self.start)
+    self.target.duration = pd.timesince(self.start)
 end
 
 function o:get_track(track_name)

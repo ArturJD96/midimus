@@ -2,8 +2,8 @@ local lu = require('luaunit')
 local o = dofile("score/score.pd_lua") ---@type Score
 
 function init()
-    o:initialize()
-    o:postinitialize()
+    o:initialize(nil, {})
+    o:postinitialize(nil, {})
 end
 
 TestRecord = {}
