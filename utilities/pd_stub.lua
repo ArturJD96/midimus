@@ -42,6 +42,11 @@ local pd_clock_stub = {
     end
 }
 
+local TIMEUNITPERMSEC = 32 * 441 -- from pdlua.c
+local function clock2systime()
+    return os.clock() * 1000 * TIMEUNITPERMSEC
+end
+
 local pd_stub = {
 
     --[[	faking pd_lua behaviour in pure lua
@@ -55,7 +60,10 @@ local pd_stub = {
         --print('send '..(sym or '')..'\n'..(sel or ''), ...)
     end,
     Receive = pd_receive_stub,
-    Clock = pd_clock_stub
+    Clock = pd_clock_stub,
+    TIMEUNITPERMSEC = TIMEUNITPERMSEC,
+    systime = clock2systime, -- NOTE: this does not behave as pd's, which uses pd.TIMEUNITPERMSEC.
+    timesince = function(systime) return math.abs(clock2systime() - systime) end
 
 }
 
