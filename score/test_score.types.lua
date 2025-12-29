@@ -16,36 +16,36 @@
 
 --[[    Event types.    ]]
 ---@class (exact) Event: Metatable<Event>
----@field public new fun(name?:string): Event
+---@field new fun(name?:string): Event
 ---properties
----@field public id EventID When event was created.
----@field public duration Miliseconds How long does the event lasts.
----@field public players Player[] Which players does this event control.
----@field public props EventProps[] What properties act out when event is called.
----@field public name EventName
+---@field id EventID When event was created.
+---@field duration Miliseconds How long does the event lasts.
+---@field players Player[] Which players does this event control.
+---@field props EventProps[] What properties act out when event is called.
+---@field name EventName
 ---methods
----@field public tostring fun(self:Event): string # Turn an event into a string representation (e.g. for logging).
+---@field tostring fun(self:Event): string # Turn an event into a string representation (e.g. for logging).
 
 
 --[[    Player types.   ]]
 ---@class (exact) Player: Metatable<Player>
----@field public new fun(offset:Miliseconds, events:Event[], speed:Speed, repeats?:number): Player
+---@field new fun(offset:Miliseconds, events:Event[], speed:Speed, repeats?:number): Player
 ---properties
----@field public events Event[] What event to play next.
----@field public offset Miliseconds How long to wait for event to play
----@field public speed Speed How fast event acts out (1: as is).
----@field public repeats? number How many times player repeats its event.
+---@field events Event[] What event to play next.
+---@field offset Miliseconds How long to wait for event to play
+---@field speed Speed How fast event acts out (1: as is).
+---@field repeats? number How many times player repeats its event.
 
 
 --[[    Recorder.   ]]
 ---@class (exact) Recorder: Metatable<Recorder>
----@field public new fun(track:Event, speed:Speed): Recorder
+---@field new fun(track:Event, speed:Speed): Recorder
 ---propertiers
----@field public start Time
----@field public speed Speed
----@field public target Event # An event to which the newly recorded events are subjugated.
+---@field start Time
+---@field speed Speed
+---@field target Event # An event to which the newly recorded events are subjugated.
 ---methods
----@field public record fun(self: Recorder, event: Event): nil
+---@field record fun(self: Recorder, event: Event): nil
 
 
 --[[    Main object.    ]]
@@ -58,6 +58,6 @@
 ---@field get_event fun(self: Score, event_label: EventName|EventID): Event|nil # Returns the track named track_name. If not such track exists yet, makes a new one.
 ---public methods
 ---@field in_1_info fun(self: Score, atoms: { [1]: EventID|EventName}): nil
----@field in_1_midi fun(self: Score, bytes: { [1]: MSB, [number]: MidiByte})
+---@field in_1_midi fun(self: Score, bytes: { [1]: MSB, [number]: MidiByte}): nil
 ---@field in_1_reload fun(self: Score): nil
 ---@field in_1_record fun(self: Score, atoms: { [1]: EventName, [2]: Speed }): nil
