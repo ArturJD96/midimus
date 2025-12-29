@@ -22,20 +22,18 @@ local function class(name, meta, parent)
     return c
 end
 
----@type Metatable<Event, fun(name?:string): Event>
+---@type Event
 local Event <const> = class("Event", {})
 function Event.new(name)
-    local event <const> = setmetatable({}, Event) ---@type Event
-    event.id = os.time()
-    event.name = name
-    event.duration = nil
-    event.props = {}
-    event.players = {}
-    return event
+    local self <const> = setmetatable({}, Event)
+    self.id = os.time()
+    self.name = name
+    self.duration = nil
+    self.props = {}
+    self.players = {}
+    return self
 end
 
----Turn an event into a string representation (e.g. for logging).
----@return string
 function Event:tostring()
     local brk = '\n        '
     local id <const> = '(' .. self.id .. ')'
@@ -53,7 +51,7 @@ function Event:tostring()
     return s
 end
 
----@type Metatable<Player, fun(offset:Miliseconds, events:Event[], speed:Speed, repeats?:number): Player>
+---@type Player
 local Player <const> = class("Player", {})
 function Player.new(offset, events, speed, repeats)
     local self = setmetatable({}, Player) ---@type Player
@@ -64,7 +62,7 @@ function Player.new(offset, events, speed, repeats)
     return self
 end
 
----@type Metatable<Recorder, fun(track:Event, speed:Speed): Recorder>
+---@type Recorder
 local Recorder <const> = class("Recorder", {})
 function Recorder.new(track, speed)
     -- Define object.
