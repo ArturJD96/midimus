@@ -1,0 +1,6 @@
+---@class (exact) PDObject
+---@field public inlets number
+---@field public outlets number
+---@field public initialize fun(self: PDObject, sel: any, atoms: table): boolean
+---@field public postinitialize fun(self: PDObject, sel: any, atoms: table): nil
+---@field public finalize fun(self: PDObject): nil
