@@ -2,9 +2,16 @@ local pd <const> = pd or require('./utilities/pd_stub')
 local o <const>  = pd.Class:new():register("score") ---@type Score
 
 ---Return current time.
----@return number
+---@return Time
 local function time()
     return os.clock()
+end
+
+---Calc (absolute) time from the given stamp.
+---@param start Time
+---@return Time
+local function timedelta(start)
+    return math.abs(time() - start)
 end
 
 ---Prepare a metatable to be implemented as a "class."
@@ -35,15 +42,15 @@ function Event.new(name)
 end
 
 function Event:tostring()
+    local cls = getmetatable(self).__type
     local brk = '\n        '
     local id <const> = '(' .. self.id .. ')'
     local players_brk = ''
     for i, p in ipairs(self.players) do
-        pd.post(tostring(p))
         local line = '  - at ' .. tostring(p.offset) .. ': ' .. tostring(p) .. brk
         players_brk = players_brk .. line
     end
-    local s = "Event "
+    local s = cls .. ' '
         .. (self.name or '') .. ' ' .. id .. ' [' .. tostring(self) .. ']:' .. brk
         .. "* duration: " .. tostring(self.duration) .. brk
         .. "* players:" .. brk
@@ -65,21 +72,20 @@ end
 ---@type Recorder
 local Recorder <const> = class("Recorder", {})
 function Recorder.new(track, speed)
-    -- Define object.
     local self = setmetatable({}, Recorder) ---@type Recorder
     self.start = time()
     self.speed = speed
     self.target = track
-    -- Process track.
-    self.target.players = {}
     return self
 end
 
----comment
----@param event Event
 function Recorder:record(event)
-    local t = math.abs(time() - self.start)
-    table.insert(self.target.players, Player.new(t, { event }, self.speed))
+    local dt = timedelta(self.start)
+    table.insert(self.target.players, Player.new(dt, { event }, self.speed))
+end
+
+function Recorder:finish()
+    self.target.duration = timedelta(self.start)
 end
 
 function o:get_track(track_name)
@@ -129,7 +135,7 @@ function o:in_1_info(atoms)
     if event then
         pd.post('[score] ' .. event:tostring())
     else
-        pd.post("[score] Event " .. event_label .. " does not exist.")
+        pd.post("[score] Unknown event: '" .. event_label .. "'.")
     end
 end
 
@@ -138,11 +144,20 @@ function o:in_1_midi(bytes)
     self.recorder:record(bytes)
 end
 
+-- function o:in_1_play(atoms)
+--     local speed <const> = atoms[2]
+
+--     -- if speed == 0 then
+
+--     -- end
+-- end
+
 function o:in_1_record(atoms)
     local track_name <const> = atoms[1]
     local speed <const> = atoms[2]
 
     if speed == 0 then
+        self.recorder:finish()
         self.recorder = nil
         return
     end

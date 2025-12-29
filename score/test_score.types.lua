@@ -19,10 +19,10 @@
 ---@field new fun(name?:string): Event
 ---properties
 ---@field id EventID When event was created.
----@field duration Miliseconds How long does the event lasts.
----@field players Player[] Which players does this event control.
----@field props EventProps[] What properties act out when event is called.
 ---@field name EventName
+---@field duration Miliseconds How long does the event lasts.
+---@field props EventProps[] What properties act out when event is called.
+---@field players Player[] Which players does this event control.
 ---methods
 ---@field tostring fun(self:Event): string # Turn an event into a string representation (e.g. for logging).
 
@@ -41,11 +41,12 @@
 ---@class (exact) Recorder: Metatable<Recorder>
 ---@field new fun(track:Event, speed:Speed): Recorder
 ---propertiers
+---@field target Event # An event to which the newly recorded events are subjugated.
 ---@field start Time
 ---@field speed Speed
----@field target Event # An event to which the newly recorded events are subjugated.
 ---methods
 ---@field record fun(self: Recorder, event: Event): nil
+---@field public finish fun(self: Recorder): nil
 
 
 --[[    Main object.    ]]
@@ -59,5 +60,6 @@
 ---public methods
 ---@field in_1_info fun(self: Score, atoms: { [1]: EventID|EventName}): nil
 ---@field in_1_midi fun(self: Score, bytes: { [1]: MSB, [number]: MidiByte}): nil
+---@field in_1_play fun(self: Score, atoms: { [1]: Speed}): nil
 ---@field in_1_reload fun(self: Score): nil
 ---@field in_1_record fun(self: Score, atoms: { [1]: EventName, [2]: Speed }): nil
