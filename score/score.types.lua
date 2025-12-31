@@ -47,6 +47,7 @@
 ---@field play_callback fun(self: Player, offset?:Miliseconds) The way this player plays it's event.
 ---methods
 ---@field play fun(self: Player, offset?:Miliseconds) Play attached events (using play_callback).
+---@field pfinishlay fun(self: Player) Play attached events (using play_callback).
 
 
 --[[    Recorder.   ]]
@@ -69,7 +70,7 @@
 ---@field players { [PlayerName]: Player }
 ---@field tracks { [EventName]: Event }
 ---private methods
----@field get_event fun(self: Score, event_label: EventName|EventID): Event|nil # Returns the track named track_name. If not such track exists yet, makes a new one.
+---@field get_event fun(self: Score, event_label: EventName|EventID, events: Event[]): Event|nil # Returns the track named track_name. If not such track exists yet, makes a new one.
 ---public methods
 ---@field in_1_info fun(self: Score, atoms: { [1]: EventID|EventName}): nil
 ---@field in_1_midi fun(self: Score, bytes: MidiByte[]): nil
