@@ -27,9 +27,25 @@ function Event.new(name)
     self.id = pd.systime()
     self.name = name
     self.duration = nil
-    self.props = {}
+    self.data = {}
     self.players = {}
+
+    -- some callback examples:
+    local midi = function(event_self, pdObj)
+        if not event_self.data.midi then return end
+        pdObj:outlet(1, "list", event_self.data.midi)
+    end
+
+    self.emit_callback = midi
+
     return self
+end
+
+function Event:emit(pdObj)
+    for i, player in ipairs(self.players) do
+        player:play()
+    end
+    self:emit_callback(pdObj)
 end
 
 function Event:tostring()
@@ -52,19 +68,42 @@ end
 
 ---@type Player
 local Player <const> = class("Player", {})
-function Player.new(offset, events, speed, repeats)
+function Player.new(pdObj, offset, events, speed, repeats)
     local self = setmetatable({}, Player) ---@type Player
+    self.o = pdObj
+    self.id = tostring(pd.systime())
     self.events = events
     self.offset = offset
     self.speed = speed
     self.repeats = repeats
+
+    -- some callback examples:
+    local at_once = function(pdObj)
+        for i, event in ipairs(self.events) do
+            event:emit(self.o)
+        end
+    end
+
+    local strum = function(pdObj) end -- arpeggio-like.
+
+    self.play_callback = at_once
+
+    -- Make callback for clock.
+    self.o[self.id] = self.play_callback
+    self.clock = pd.clock(self.o, self.id)
+
     return self
+end
+
+function Player:play(offset)
+    self.clock:delay(offset or self.offset)
 end
 
 ---@type Recorder
 local Recorder <const> = class("Recorder", {})
-function Recorder.new(track, speed)
+function Recorder.new(pdObj, track, speed)
     local self = setmetatable({}, Recorder) ---@type Recorder
+    self.o = pdObj
     self.start = pd.systime()
     self.speed = speed
     self.target = track
@@ -73,21 +112,11 @@ end
 
 function Recorder:record(event)
     local dt = pd.timesince(self.start)
-    table.insert(self.target.players, Player.new(dt, { event }, self.speed))
+    table.insert(self.target.players, Player.new(self.o, dt, { event }, self.speed))
 end
 
 function Recorder:finish()
     self.target.duration = pd.timesince(self.start)
-end
-
-function o:get_track(track_name)
-    local track <const> = self.tracks[track_name]
-    if not track then
-        local track_new <const> = Event.new(track_name)
-        self.tracks[track_name] = track_new
-        return track_new
-    end
-    return track
 end
 
 function o:get_event(event_label)
@@ -109,6 +138,7 @@ end
 
 function o:postinitialize(sel, atoms)
     self.tracks = {}
+    self.players = {}
 end
 
 function o:finalize() end
@@ -133,16 +163,33 @@ end
 
 function o:in_1_midi(bytes)
     if not self.recorder then return end
-    self.recorder:record(bytes)
+    local event = Event.new()
+    event.data.midi = bytes
+    self.recorder:record(event)
 end
 
--- function o:in_1_play(atoms)
---     local speed <const> = atoms[2]
+function o:in_1_play(atoms)
+    local track_name <const> = atoms[1]
+    local speed <const> = atoms[2]
+    local repeats <const> = 0
 
---     -- if speed == 0 then
+    if not track_name then
+        pd.post("[score] Unknown event: '" .. track_name .. "'.")
+        return
+    end
 
---     -- end
--- end
+    local track <const> = self:get_event(track_name)
+
+    if speed == 0 then
+        -- self.players[track_name]:finish()
+        self.players[track_name] = nil
+        return
+    end
+
+    local player = Player.new(self, 0, { track }, speed, repeats)
+    self.players[track_name] = player
+    player:play()
+end
 
 function o:in_1_record(atoms)
     local track_name <const> = atoms[1]
@@ -156,7 +203,7 @@ function o:in_1_record(atoms)
 
     local track <const> = Event.new(track_name)
     self.tracks[track_name] = track
-    self.recorder = Recorder.new(track, speed)
+    self.recorder = Recorder.new(self, track, speed)
 end
 
 return o
