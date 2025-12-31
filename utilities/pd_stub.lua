@@ -25,7 +25,7 @@ local pd_receive_stub = {
 }
 
 local pd_clock_stub = {
-    new = function()
+    new = function(self)
         return {
             register = function(self, obj, method)
                 return {
@@ -35,7 +35,9 @@ local pd_clock_stub = {
                         os.execute('sleep ' .. tonumber(ms / 1000))
                         obj[method]()
                     end,
-                    unset = function(self) end
+                    set = function(self, number) end,
+                    unset = function(self) end,
+                    _clock = setmetatable({}, { __tostring = function() return "userdata: 0xDEADBEEF" end })
                 }
             end,
         }
@@ -63,8 +65,8 @@ local pd_stub = {
     Clock = pd_clock_stub,
     TIMEUNITPERMSEC = TIMEUNITPERMSEC,
     systime = clock2systime, -- NOTE: this does not behave as pd's, which uses pd.TIMEUNITPERMSEC.
-    timesince = function(systime) return math.abs(clock2systime() - systime) end
-
+    timesince = function(systime) return math.abs(clock2systime() - systime) end,
+    clock = function(obj, method) return pd_clock_stub:new():register(obj, method) end
 }
 
 return pd_stub
