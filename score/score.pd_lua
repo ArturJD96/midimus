@@ -1,5 +1,7 @@
-local pd <const> = pd or require('./utilities/pd_stub')
+local pd <const> = pd or require "score/src/utils/pd_stub"
 local o <const>  = pd.Class:new():register("score") ---@type Score
+
+
 
 local function systime2sec(systime)
     return systime / pd.TIMEUNITPERMSEC * 10
@@ -19,6 +21,8 @@ local function class(name, meta, parent)
     c.__index = parent or c
     return c
 end
+
+
 
 ---@type Event
 local Event <const> = class("Event", {})
@@ -65,6 +69,8 @@ function Event:tostring()
         .. players_brk
     return s
 end
+
+
 
 ---@type Player
 local Player <const> = class("Player", {})
@@ -118,6 +124,8 @@ function Player:finish()
     end
 end
 
+
+
 ---@type Recorder
 local Recorder <const> = class("Recorder", {})
 function Recorder.new(pdObj, track, speed)
@@ -138,6 +146,8 @@ function Recorder:finish()
     self.target.duration = pd.timesince(self.start)
 end
 
+
+
 function o:get_event(event_label, events)
     if type(event_label) == "number" then
         pd.post("Unnamed Event " .. event_label .. " cannot be found (not implemented).")
@@ -145,9 +155,6 @@ function o:get_event(event_label, events)
     return events[event_label]
 end
 
---[[
-	    pd-lua.
-]]
 
 function o:initialize(sel, atoms)
     self.inlets = 1
@@ -155,20 +162,20 @@ function o:initialize(sel, atoms)
     return true
 end
 
+
 function o:postinitialize(sel, atoms)
     self.tracks = {}
     self.players = {}
 end
 
+
 function o:finalize() end
+
 
 function o:in_1_reload()
     self:dofilex(self._scriptname)
 end
 
---[[
-	    Pure Data.
-]]
 
 function o:in_1_info(atoms)
     local event_label <const> = atoms[1]
@@ -180,6 +187,7 @@ function o:in_1_info(atoms)
     end
 end
 
+
 function o:in_1_loop(atoms)
     local track_name <const> = atoms[1] ---@type string
     local toggle <const> = atoms[2] ---@type boolean
@@ -187,12 +195,14 @@ function o:in_1_loop(atoms)
     o:in_1_repeat({ track_name, -1, speed })
 end
 
+
 function o:in_1_midi(bytes)
     if not self.recorder then return end
     local event <const> = Event.new()
     event.data.midi = bytes
     self.recorder:record(event)
 end
+
 
 function o:in_1_play(atoms)
     local track_name <const> = atoms[1]
@@ -225,6 +235,7 @@ function o:in_1_play(atoms)
     player:play()
 end
 
+
 function o:in_1_record(atoms)
     local track_name <const> = atoms[1]
     local speed <const> = atoms[2]
@@ -239,6 +250,7 @@ function o:in_1_record(atoms)
     self.tracks[track_name] = track
     self.recorder = Recorder.new(self, track, speed)
 end
+
 
 -- function o:in_1_repeat(atoms)
 --     local track_name <const> = atoms[1]
@@ -262,5 +274,6 @@ end
 --     self.players[track_name] = player
 --     player:play()
 -- end
+
 
 return o

@@ -1,6 +1,6 @@
 local lu = require('luaunit')
 local o = dofile("score/score.pd_lua") ---@type Score
-
+print(o)
 function init(o)
     o:finalize()
     o:initialize(nil, {})
