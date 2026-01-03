@@ -1,0 +1,4 @@
+---@alias Time number # And absolute unit of (current) time.
+---@alias Miliseconds number
+---@alias Systime number # An absolute time expressed in pd's units.
+---@alias Speed number # The speed of an imaginary "tape". 1 is normal, 0 is still, -1 is backward, 2 is twice as fast.

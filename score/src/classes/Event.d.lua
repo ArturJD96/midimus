@@ -1,0 +1,21 @@
+---@alias EventID number
+---@alias EventName string
+
+--- Basic class for all the musical event.
+--- An event can emit a callback function
+--- (e.g. outputting a message or changing the internal state).
+--- Event can "act out" (be played) when passed to `Player`.
+--- This happens by playing all the players within event's `.players`.
+--- An event itself can rule over other players with their own events.
+---@class (exact) Event: Metatable<Event>
+---@field new fun(name?:string): Event
+---properties
+---@field id EventID When event was created.
+---@field name EventName More "user-friendly" name of an event (if given).
+---@field duration Miliseconds How long does the event lasts (this is usually set by Player).
+---@field data {midi:MidiByte[]} What data act out when event is called.
+---@field players Player[] Which players does this event control.
+---@field emit_callback fun(self:Event, o:Score) What the Pd object does.
+---methods
+---@field tostring fun(self:Event): string # Turn an event into a string representation (e.g. for logging).
+---@field emit fun(self:Event, o:Score) # Do this when event is called (e.g. output something from an pd box's outlet – this is defined in emit_callback).

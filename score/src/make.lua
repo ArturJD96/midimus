@@ -17,7 +17,7 @@ local function get_code(dir, fnames)
         elseif file_name then
             local patt_returns = 'return ' .. script:match('(.+)%.lua$') .. '\n$'
             local fp = dir_full .. '/' .. script
-            print(fp)
+            print('* parsing ' .. fp)
             local file = io.open(fp, "r")
             local text = file:read("a")
             local code = text:gsub(patt_requires, ""):gsub(patt_returns, "")
@@ -27,6 +27,8 @@ local function get_code(dir, fnames)
     end
     return content
 end
+
+print("Compiling score.pd_lua...")
 
 local utils <const>   = get_code("utils", {
     "systime2sec.lua",
@@ -64,3 +66,5 @@ local script          = header .. utils .. classes .. private .. obj .. methods 
 local dist            = io.open("score.pd_lua", "w")
 dist:write(script)
 dist:close()
+
+print("done!")

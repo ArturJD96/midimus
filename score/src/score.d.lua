@@ -1,0 +1,14 @@
+--[[    Main object.    ]]
+---@class (exact) Score: PDObject
+---properties
+---@field recorder Recorder
+---@field players { [PlayerName]: Player }
+---@field tracks { [EventName]: Event }
+---private methods
+---@field get_event fun(self: Score, event_label: EventName|EventID, events: Event[]): Event|nil # Returns the track named track_name. If not such track exists yet, makes a new one.
+---public methods
+---@field in_1_info fun(self: Score, atoms: { [1]: EventID|EventName}): nil
+---@field in_1_midi fun(self: Score, bytes: MidiByte[]): nil
+---@field in_1_play fun(self: Score, atoms: { [1]: EventName, [2]: Speed}): nil
+---@field in_1_reload fun(self: Score): nil
+---@field in_1_record fun(self: Score, atoms: { [1]: EventName, [2]: Speed }): nil

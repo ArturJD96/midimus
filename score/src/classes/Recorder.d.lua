@@ -1,0 +1,11 @@
+--- Register incoming `event` at its arrival's `systime`.
+---@class (exact) Recorder: Metatable<Recorder>
+---@field new fun(o:Score, track:Event, speed:Speed): Recorder
+---propertiers
+---@field o Score # A backreference to the top object.
+---@field target Event # An event to which the newly recorded events are subjugated.
+---@field start Systime # systime at the start of the recording
+---@field speed Speed # Under what speed the recording takes place.
+---methods
+---@field record fun(self: Recorder, event: Event): nil # Record incoming event at `event`'s `systime`. A received event is wrapped in a `Player` and then passed to the `Recorder`'s `.players` table.
+---@field finish fun(self: Recorder): nil # Finish the recording and calculate final duration of the whole recording.
