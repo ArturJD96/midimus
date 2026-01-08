@@ -15,6 +15,7 @@ function Player.new(pdObj, offset, events, speed, repeats)
 
     -- Shall the clock be destroyed when player does not play?
     -- And also the method?
+    -- Shall it be moved to :play() or :__call()?
     self.clock = pd.clock(self.o, self.id)
     self.o[self.id] = self
     self.session = nil
