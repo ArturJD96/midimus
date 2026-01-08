@@ -3,7 +3,7 @@
 ---properties
 ---@field recorder Recorder
 ---@field players { [PlayerName]: Player }
----@field tracks { [EventName]: Event }
+---@field tracks { [EventName]: Event } # Events with names accessible from pd interface.
 ---private methods
 ---@field get_event fun(self: Score, event_label: EventName|EventID, events: Event[]): Event|nil # Returns the track named track_name. If not such track exists yet, makes a new one.
 ---public methods
