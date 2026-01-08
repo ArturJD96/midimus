@@ -3,32 +3,26 @@ local o <const> = require "src/obj"
 local Player <const> = require "src/classes/Player"
 
 function o:in_1_play(atoms)
-    local track_name <const> = atoms[1]
-    local speed <const> = atoms[2]
-    local repeats <const> = atoms[3] or 0
+    local track_name <const> = atoms[1] ---@type EventName
+    local speed <const> = atoms[2] ---@type Speed
+    local repeats <const> = atoms[3] or 1 ---@type integer
 
-    if not track_name then
-        pd.post("[score] Unknown event: '" .. track_name .. "'.")
+    local track <const> = self:get_track(track_name)
+    if not track then
+        self:error("[score] Unknown event: '" .. track_name .. "'.")
         return
     end
 
-    local track <const> = self:get_event(track_name, self.tracks)
-    local player = self:get_event(track_name, self.players) ---@type Player
-
-    if player then
-        player.clock:unset()
-        player.speed = speed
-        player.repeats = repeats
-    else
-        player = Player.new(self, 0, { track }, speed, repeats)
-    end
-
-    if speed == 0 then
-        player:finish()
+    local player_old = self:get_player(track_name)
+    if player_old then
+        player_old:finish()
         self.players[track_name] = nil
-        return
     end
 
-    self.players[track_name] = player
-    player:play()
+    if speed == 0 then return end
+
+    player_new = Player.new(self, 0, { track }, speed, repeats)
+
+    self.players[track_name] = player_new
+    player_new:play()
 end

@@ -1,18 +1,21 @@
 ---@alias PlayerID string
 ---@alias PlayerName string
 
---- A wrapper around pd's `clock` method.
+--- A wrapper around pd's `clock`.
+--- It is attached to the main lua object and called as it's `clock`'s method.
 ---@class (exact) Player: Metatable<Player>
 ---@field new fun(o:Score, offset:Miliseconds, events:Event[], speed:Speed, repeats?:number): Player
+---@field __call fun(self:Player)
 ---properties
 ---@field o Score Backreference to the top object.
----@field id PlayerID When Player was created.
+---@field id PlayerID Unique number at player's creation.
 ---@field clock Clock Pd's `clock` object ascribed to this player.
 ---@field events Event[] What event to play next.
 ---@field offset Miliseconds How long to wait for event to play
 ---@field speed Speed How fast event acts out (1: as is).
 ---@field repeats? number How many times player repeats its event.
----@field play_callback fun(self: Player, offset?:Miliseconds) The way this player plays it's event.
+---@field session? {repeats_remaining: integer}
 ---methods
----@field play fun(self: Player, offset?:Miliseconds) Play attached events (using play_callback).
+---@field play fun(self: Player, offset?:Miliseconds) Play attached events.
 ---@field finish fun(self: Player) Finish playing and cancell all the running clocks within this `players`'s `event`s.
+---@field tostring fun(self: Player): string
