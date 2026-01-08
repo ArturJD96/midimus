@@ -40,7 +40,8 @@ local classes <const> = get_code("classes", {
     "Recorder.lua"
 })
 local private <const> = get_code("pd-private", {
-    "get_event.lua"
+    "get_track.lua",
+    "get_player.lua"
 })
 local obj <const>     = get_code("pd-lua", {
     "initialize.lua",
@@ -49,6 +50,7 @@ local obj <const>     = get_code("pd-lua", {
     "reload.lua"
 })
 local methods <const> = get_code("pd-methods", {
+    "debug.lua",
     "info.lua",
     "loop.lua",
     "midi.lua",

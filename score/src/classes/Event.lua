@@ -7,7 +7,7 @@ local systime2sec <const> = require "src/utils/systime2sec"
 local Event <const> = class("Event", {})
 function Event.new(name)
     local self <const> = setmetatable({}, Event)
-    self.id = pd.systime()
+    self.id = tostring(math.random())
     self.name = name
     self.duration = nil
     self.data = {}
@@ -38,7 +38,7 @@ function Event:tostring()
     local time <const> = systime2sec(self.duration)
     local players_brk = ''
     for i, p in ipairs(self.players) do
-        local line <const> = '  - at ' .. tostring(systime2sec(p.offset)) .. ': ' .. tostring(p) .. brk
+        local line <const> = '  - at ' .. tostring(systime2sec(p.offset)) .. ': ' .. p:tostring() .. brk
         players_brk = players_brk .. line
     end
     local s <const> = cls .. ' '

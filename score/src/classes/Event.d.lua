@@ -13,9 +13,7 @@
 ---@field id EventID When event was created.
 ---@field name EventName More "user-friendly" name of an event (if given).
 ---@field duration Miliseconds How long does the event lasts (this is usually set by Player).
----@field data {midi:MidiByte[]} What data act out when event is called.
----@field players Player[] Which players does this event control.
----@field emit_callback fun(self:Event, o:Score) What the Pd object does.
+---@field emitters {[number|string]:Emitter} Table of objects that need to be called when this event is triggered. Iterate over it using pairs(). Timed events are stored under number index and other emmiters at string.
 ---methods
 ---@field tostring fun(self:Event): string # Turn an event into a string representation (e.g. for logging).
 ---@field emit fun(self:Event, o:Score) # Do this when event is called (e.g. output something from an pd box's outlet – this is defined in emit_callback).
