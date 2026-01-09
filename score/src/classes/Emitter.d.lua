@@ -1,0 +1,3 @@
+---@class (exact) Emitter: Metatable<Emitter>
+---@field __call fun(self:Emitter, pdObj:Score)
+---@field data any

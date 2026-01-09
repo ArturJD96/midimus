@@ -35,6 +35,7 @@ local utils <const>   = get_code("utils", {
     "class.lua",
 })
 local classes <const> = get_code("classes", {
+    "Emitter.lua",
     "Event.lua",
     "Player.lua",
     "Recorder.lua"
