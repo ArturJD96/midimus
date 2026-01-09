@@ -24,25 +24,25 @@ local pd_receive_stub = {
     end
 }
 
-local pd_clock_stub = {
-    new = function(self)
-        return {
-            register = function(self, obj, method)
-                return {
-                    callback = obj[method],
-                    destruct = function(self) end,
-                    delay = function(self, ms)
-                        os.execute('sleep ' .. tonumber(ms / 1000))
-                        obj[method]()
-                    end,
-                    set = function(self, number) end,
-                    unset = function(self) end,
-                    _clock = setmetatable({}, { __tostring = function() return "userdata: 0xDEADBEEF" end })
-                }
-            end,
-        }
-    end
-}
+local Clock = {}
+Clock.__index = Clock
+function Clock:new()
+    return {
+        register = function(self, obj, method)
+            return {
+                callback = obj[method],
+                destruct = function(self) end,
+                delay = function(self, ms)
+                    os.execute('sleep ' .. tonumber(ms / 1000))
+                    obj[method]()
+                end,
+                set = function(self, number) end,
+                unset = function(self) end,
+                _clock = setmetatable({}, { __tostring = function() return "userdata: 0xDEADBEEF" end })
+            }
+        end,
+    }
+end
 
 local TIMEUNITPERMSEC = 32 * 441 -- from pdlua.c
 local function clock2systime()
@@ -62,11 +62,13 @@ local pd_stub = {
         --print('send '..(sym or '')..'\n'..(sel or ''), ...)
     end,
     Receive = pd_receive_stub,
-    Clock = pd_clock_stub,
+    Clock = Clock,
     TIMEUNITPERMSEC = TIMEUNITPERMSEC,
     systime = clock2systime, -- NOTE: this does not behave as pd's, which uses pd.TIMEUNITPERMSEC.
     timesince = function(systime) return math.abs(clock2systime() - systime) end,
-    clock = function(obj, method) return pd_clock_stub:new():register(obj, method) end
+    clock = function(obj, method)
+        return Clock:new():register(obj, method)
+    end
 }
 
 return pd_stub
