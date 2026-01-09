@@ -13,7 +13,7 @@ function o:in_1_play(atoms)
         return
     end
 
-    local player_old = self:get_player(track_name)
+    local player_old <const> = self:get_player(track_name)
     if player_old then
         player_old:finish()
         self.players[track_name] = nil
@@ -21,7 +21,7 @@ function o:in_1_play(atoms)
 
     if speed == 0 then return end
 
-    player_new = Player.new(self, 0, { track }, speed, repeats)
+    local player_new <const> = Player.new(self, 0, { track }, speed, repeats)
 
     self.players[track_name] = player_new
     player_new:play()

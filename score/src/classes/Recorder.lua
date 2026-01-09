@@ -16,7 +16,7 @@ end
 
 function Recorder:record(event)
     local dt <const> = pd.timesince(self.start)
-    table.insert(self.target.players, Player.new(self.o, dt, { event }, self.speed))
+    table.insert(self.target.players, Player.new(self.o, dt, { event }, self.speed, 0))
 end
 
 function Recorder:finish()
