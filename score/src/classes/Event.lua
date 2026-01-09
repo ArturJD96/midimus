@@ -10,17 +10,8 @@ function Event.new(name)
     self.id = tostring(math.random())
     self.name = name
     self.duration = nil
-    self.data = {}
     self.players = {}
-
-    -- some callback examples:
-    local midi = function(event_self, pdObj)
-        if not event_self.data.midi then return end
-        pdObj:outlet(1, "list", event_self.data.midi)
-    end
-
-    self.emit_callback = midi
-
+    self.emitters = {}
     return self
 end
 
@@ -28,7 +19,9 @@ function Event:emit(pdObj)
     for i, player in ipairs(self.players) do
         player:play()
     end
-    self:emit_callback(pdObj)
+    for k, emitter in pairs(self.emitters) do
+        emitter(pdObj)
+    end
 end
 
 function Event:tostring()

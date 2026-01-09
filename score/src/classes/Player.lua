@@ -11,7 +11,7 @@ function Player.new(pdObj, offset, events, speed, repeats)
     self.events = events
     self.offset = offset
     self.speed = speed
-    self.repeats = repeats or 1
+    self.repeats = repeats or 0
 
     -- Shall the clock be destroyed when player does not play?
     -- And also the method?
