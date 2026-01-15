@@ -5,7 +5,7 @@ local Player <const> = require "src/classes/Player"
 function o:in_1_play(atoms)
     local track_name <const> = atoms[1] ---@type EventName
     local speed <const> = atoms[2] ---@type Speed
-    local repeats <const> = atoms[3] or 1 ---@type integer
+    local repeats <const> = atoms[3] ---@type integer | nil
 
     local track <const> = self:get_track(track_name)
     if not track then

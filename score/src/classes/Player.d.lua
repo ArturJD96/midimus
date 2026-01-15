@@ -14,7 +14,7 @@
 ---@field offset Miliseconds How long to wait for event to play
 ---@field speed Speed How fast event acts out (1: as is).
 ---@field repeats? number How many times player repeats its event.
----@field session? {repeats_remaining: integer}
+---@field session? {repeats: integer}
 ---methods
 ---@field play fun(self: Player, offset?:Miliseconds) Play attached events.
 ---@field finish fun(self: Player) Finish playing and cancell all the running clocks within this `players`'s `event`s.
