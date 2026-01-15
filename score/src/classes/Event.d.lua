@@ -18,3 +18,4 @@
 ---methods
 ---@field tostring fun(self:Event): string # Turn an event into a string representation (e.g. for logging).
 ---@field emit fun(self:Event, o:Score) # Do this when event is called (e.g. output something from an pd box's outlet – this is defined in emit_callback).
+---@field merge fun(self:Event, other:Event, time_offset:number, overdub?:boolean) # Merges an `event` with the `other` one. All `player`s are copied and duration is recalculated. When `overdub`bing, `player`s starting within time of the other `event`'s duration are removed.

@@ -14,13 +14,14 @@ function Recorder.new(pdObj, track, speed)
     return self
 end
 
-function Recorder:record(event)
-    local dt <const> = pd.timesince(self.start)
-    table.insert(self.target.players, Player.new(self.o, dt, { event }, self.speed, 0))
+function Recorder:record(event, time)
+    local dt <const> = time or pd.timesince(self.start)
+    local player <const> = Player.new(self.o, dt, { event }, self.speed)
+    table.insert(self.target.players, player)
 end
 
-function Recorder:finish()
-    self.target.duration = pd.timesince(self.start)
+function Recorder:finish(time)
+    self.target.duration = time or pd.timesince(self.start)
 end
 
 return Recorder

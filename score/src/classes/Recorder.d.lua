@@ -7,5 +7,5 @@
 ---@field start Systime # systime at the start of the recording
 ---@field speed Speed # Under what speed the recording takes place.
 ---methods
----@field record fun(self: Recorder, event: Event): nil # Record incoming event at `event`'s `systime`. A received event is wrapped in a `Player` and then passed to the `Recorder`'s `.players` table.
----@field finish fun(self: Recorder): nil # Finish the recording and calculate final duration of the whole recording.
+---@field record fun(self:Recorder, event:Event, time?:Time): nil # Record incoming event at `event`'s `systime`. A received event is wrapped in a `Player` and then passed to the `Recorder`'s `.players` table.
+---@field finish fun(self:Recorder, time?:Time): nil # Finish the recording and calculate final duration of the whole recording.
