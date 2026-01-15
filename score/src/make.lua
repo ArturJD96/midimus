@@ -51,13 +51,15 @@ local obj <const>     = get_code("pd-lua", {
     "reload.lua"
 })
 local methods <const> = get_code("pd-methods", {
+    "clear.lua",
     "debug.lua",
     "info.lua",
     "loop.lua",
     "midi.lua",
     "play.lua",
     "record.lua",
-    "repeat.lua"
+    "repeat.lua",
+    "thru.lua"
 })
 
 local header          = [[

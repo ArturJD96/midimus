@@ -4,6 +4,7 @@
 ---@field recorder Recorder
 ---@field players { [PlayerName]: Player }
 ---@field tracks { [EventName]: Event } # Events with names accessible from pd interface.
+---@field thru EventName|nil # When set, lists passing through the pd object (like midi) are assigned to this `track`.
 ---private methods
 ---@field get_player fun(self:Score, player_label:PlayerName|PlayerID): Player|nil
 ---@field get_track fun(self:Score, track_label:EventName|EventID): Event|nil # Returns the track named track_name. If not such track exists yet, makes a new one.
@@ -12,5 +13,5 @@
 ---@field in_1_info fun(self:Score, atoms: { [1]:EventID|EventName }): nil
 ---@field in_1_midi fun(self:Score, bytes:MidiByte[], debug: {time:Time}): nil
 ---@field in_1_play fun(self:Score, atoms: { [1]:EventName, [2]:Speed, [3]:integer}): nil
----@field in_1_record fun(self:Score, atoms: { [1]:EventName, [2]:Speed, [3]:boolean, [4]:Time|"append"|"prepend", [5]:boolean}, debug: {time:Time}): nil
+---@field in_1_record fun(self:Score, atoms: { [1]:EventName, [2]:Speed, [3]:boolean|nil, [4]:Time|"append"|"prepend"|nil, [5]:boolean|nil}, debug: {time:Time}): nil
 ---@field in_1_reload fun(self:Score): nil

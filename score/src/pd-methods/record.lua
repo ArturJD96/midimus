@@ -7,15 +7,17 @@ local Recorder <const> = require "src/classes/Recorder"
 --- 1) `track` *(str)* – name of a `track`.
 --- 2) `speed` *(int)* – default speed at which recording is taken (`1`). When `0`, stops recording.
 --- 3) `arm` *(bool)* – start recording only when the first event hits.
---- 4) `offset=0` *(miliseconds, "append" or "prepend")* – at what point in time the new `event`s are added to `track`.
+--- 4) `offset=nil` *(miliseconds, "append" or "prepend")* – at what point in time the new `event`s are added to the existing `track`.
+---    * If not provided, previous `track` data is overriden (if exists).
+---    * If number, start modifying original `track` at this point in time (ms).
 ---    * If set to `"prepend"`, content is added before the `track` (including `tracks`'s duration').
 ---    * If set to `"append"`, content is added after the track.
---- 5) `overdub=0` *(bool)* – new content overrides the old one (default behaviour). Note: does nothing if `offset` is set to "append" or "prepend".
+--- 5) `overdub=nil` *(bool)* – new content overrides the old one (default behaviour). Note: does nothing if `offset` is set to "append" or "prepend".
 function o:in_1_record(atoms, debug)
     local track_name <const> = atoms[1]
     local speed <const> = atoms[2]
     local arm <const> = atoms[3]
-    local offset <const> = atoms[4] or 0
+    local offset <const> = atoms[4]
     local overdub <const> = atoms[5]
 
     if not speed then
@@ -33,7 +35,11 @@ function o:in_1_record(atoms, debug)
         self.recorder = nil
         if track_old then
             --- When track already exists, modify it.
-            if offset == "append" then
+            if offset == nil then
+                --- old track is entirely substituted with the new one
+                --- but the reference is kept.
+                for k, v in pairs(track_new) do track_old[k] = v end
+            elseif offset == "append" then
                 track_old:merge(track_new, track_old.duration)
             elseif offset == "prepend" then
                 track_old:merge(track_new, -track_new.duration)
